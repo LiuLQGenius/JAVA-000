@@ -4,6 +4,7 @@ import org.apache.http.client.methods.*;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
 
@@ -20,7 +21,7 @@ public class HTTPMain {
     private static CloseableHttpClient httpSyncClient;
 
     public static CloseableHttpClient getSyncHttpClient() {
-        return httpSyncClient;
+        return HttpClients.createDefault();
     }
 
     public static void main(String[] args) {
