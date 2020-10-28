@@ -18,19 +18,22 @@ import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 
 public class HTTPMain {
 
-    private static CloseableHttpClient httpSyncClient;
-
     public static CloseableHttpClient getSyncHttpClient() {
         return HttpClients.createDefault();
     }
 
-    public static void main(String[] args) {
-        System.out.println(executeSyncAndGetResponse("GET","http://localhost:8080", null, null, null, null));
+    public static void main(String[] args) throws IOException {
+
+        CloseableHttpResponse response = executeSyncAndGetResponse("GET", "http://localhost:8080",
+                null, null, null, null);
+        System.out.println(EntityUtils.toString(response.getEntity()));
+
     }
 
-    public static String executeSyncAndGetResponse(String method, String url,
-                                                   List<Map.Entry<String, String>> queryParams, List<Map.Entry<String, String>> headers, String body,
-                                                   CloseableHttpClient httpClient) {
+    public static CloseableHttpResponse executeSyncAndGetResponse(String method, String url,
+                                                                  List<Map.Entry<String, String>> queryParams,
+                                                                  List<Map.Entry<String, String>> headers, String body,
+                                                                  CloseableHttpClient httpClient) {
 
         HttpUriRequest request;
         try {
@@ -43,12 +46,10 @@ public class HTTPMain {
     }
 
 
-
-    public static String executeSync(HttpUriRequest request, CloseableHttpClient client) {
+    public static CloseableHttpResponse executeSync(HttpUriRequest request, CloseableHttpClient client) {
         CloseableHttpClient finalHttpClient = client != null ? client : getSyncHttpClient();
         try {
-            CloseableHttpResponse response = finalHttpClient.execute(request);
-            return EntityUtils.toString(response.getEntity());
+            return finalHttpClient.execute(request);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
